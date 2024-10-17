@@ -1,3 +1,7 @@
+/**
+ * Schema for Sites (Blueprint)
+ * This schema creates a collection if it doesn't exist in MongoDb
+ */
 import mongoose from "mongoose"; 
 
 const Schema = mongoose.Schema; 
