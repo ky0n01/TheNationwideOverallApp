@@ -21,6 +21,10 @@ const getSite = async (req, res) => {
         }
 
         const site = await Site.findById(id) 
+        
+        if(!site){
+            return res.status(404).json( {error: `Sorry, but the site you are looking for doesnt exist. Id: ${id}`} )
+        }
 
         res.status(200).json(site)
     } catch(err) {
@@ -35,6 +39,7 @@ const createSite = async (req, res) => {
     // add doc to db
     try {
         const site = await Site.create( {nationwide_id, location, barangay, locality, province, region} )
+        
         res.status(200).json(site)
     } catch(err) {
         res.status(404).json( {error: err} )
@@ -50,11 +55,11 @@ const updateSite = async (req, res) => {
             return res.status(404).json( {error: `Sorry, but the site you are trying to update doesnt exist. Id: ${id}`} )
         }
 
-        const site = await Site.updateOne( {_id: id}, {$set: {key}} )
+        const site = await Site.findOneAndUpdate( {_id: id}, {...req.body} )
 
-        // if(!site){
-        //     res.status(404).json( {error: 'Site not found.'} )
-        // }
+        if(!site){
+            res.status(404).json( {error: 'Site not found.'} )
+        }
 
         res.status(200).json(site)
     } catch(err) {
@@ -72,13 +77,13 @@ const deleteSite = async (req, res) => {
             return res.status(404).json( {error: `Sorry, but the site you are looking for doesnt exist. Id: ${id}`} )
         }
 
-        const site = await Site.deleteOne( {nationwide_id: id} )
+        const site = await Site.findOneAndDelete( {_id: id} )
     
-        if(site.deletedCount){
-            return res.status(404).json( { success: `Successfully deleted Site with Id: ${id}`} )
+        if(!site){
+            return res.status(200).json( {error: `Failed to delete site with ID: ${id}`} )
         }
-       
-        res.status(200).json( {error: `Failed to delete site with ID: ${id}`} )
+        
+        res.status(200).json( { success: `Successfully deleted Site with Id: ${id}`} )
     } catch(err) {
         res.status(400).json( {error: `Error: ${err}. Unable to delete the Site Id ${id}`} )
     }
