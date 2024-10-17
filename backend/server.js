@@ -10,13 +10,13 @@ const URI = process.env.MONGO_URI
 const app = express()
 app.use(express.json())
 
-// middleware. a piece of code that gets executed between a request and response
+// Middleware. a piece of code that gets executed between a request and response
 app.use((req, res, next) => {
     console.log(`Path: ${req.path}`, `Method: ${req.method}`) 
     next() 
 }) 
 
-// location routes
+// Location routes
 app.use('/api/sites/', locationRoutes)  
 
 // Connnect to database

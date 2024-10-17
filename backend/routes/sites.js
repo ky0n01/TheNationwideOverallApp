@@ -1,40 +1,30 @@
 import express from 'express' 
 import mongoose from 'mongoose'
 import Sites from '../models/SitesModel.js'
+import {    
+    getAllSites,
+    getSite, 
+    createSite,
+    updateSite, 
+    deleteSite
+} from '../controllers/siteController.js'
 
 const router = express.Router();
  
 // GET all Sites
-router.get('/', (req, res) => { 
-   res.json( {msg: "Get all sites"} )
-})
+router.get('/', getAllSites)
 
 // GET a single Site
-router.get('/:id', (req, res) => {
-    res.json( {msg: 'Get a single Site'} )
-})
+router.get('/:id', getSite)
 
-// POST a new Site
-// Create collection named `nation_cols` 
-router.post('/', async (req, res) => {
-    const {nationwide_id, location, barangay, locality, province, region} = req.body
-    try {
-        const site = await Sites.create({nationwide_id, location, barangay, locality, province, region})
-        res.status(200).json(site)
-    } catch(err) {
-        res.status(400).json({error: err.message})
-    }
-})
+// POST a new Site (for test only)
+router.post('/', createSite)
 
 // Update a Site
-router.patch('/:id', (req, res) => {
-    res.json( {msg: 'UPDATE a new Site'} )
-})
+router.patch('/:id', updateSite)
 
 // DELETE a new Site
-router.delete('/:id', (req, res) => {
-    res.json( {msg: 'DELETE a Site'} )
-})
+router.delete('/:id', deleteSite)
 
 
 export default router;
