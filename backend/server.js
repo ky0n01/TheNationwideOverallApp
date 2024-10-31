@@ -2,6 +2,7 @@ import dotenv from 'dotenv'
 import express from 'express'
 import mongoose from 'mongoose'
 import locationRoutes from './routes/sites.js'
+import cors from 'cors' 
 
 dotenv.config({path: './.env'})
 const PORT = process.env.PORT 
@@ -15,6 +16,8 @@ app.use((req, res, next) => {
     console.log(`Path: ${req.path}`, `Method: ${req.method}`) 
     next() 
 }) 
+
+app.use(cors())
 
 // Location routes
 app.use('/api/sites/', locationRoutes)  

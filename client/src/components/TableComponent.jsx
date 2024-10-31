@@ -1,5 +1,5 @@
 import React from 'react'
-import useState from 'react'
+import { useState, useEffect } from 'react'
 import UnfoldMoreOutlinedIcon from "@mui/icons-material/UnfoldMoreOutlined";
 import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutlined";
 import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
@@ -40,6 +40,21 @@ const resize = { resizerHighlight: "#dde2eb" };
 const TableComponent = () => {
   const theme = useTheme(getTheme());
   const data = { nodes }
+  const [ sites, setSites ] = useState(null)
+
+  useEffect(() => {
+    const fetchSites = async () =>  {
+      const response = await fetch('http://localhost:5000/api/sites')
+      const json = await response.json() 
+
+      if(response.ok){
+        console.log(json)
+        setSites(json)
+      }
+    }
+
+    fetchSites()
+  }, [])
 
   const sort = useSort(
     data,
@@ -78,6 +93,8 @@ const TableComponent = () => {
 
     return <UnfoldMoreOutlinedIcon />;
   };
+
+
 
   return (
     <MaterialThemeProvider theme={createMaterialTheme({})}>
