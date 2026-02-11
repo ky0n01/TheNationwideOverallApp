@@ -1,10 +1,18 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import ReactDOM from 'react-dom/client'
-//import nodes from '/src/nodes.json'; // json in local storage. no problems encountered. 
+import ReactDOM from 'react-dom/client' 
+import fetchData from '../fetchData.tsx'
 
-// Tanstack dependencies
 import {
+  keepPreviousData,
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from '@tanstack/react-query'
+
+// Tanstack library
+import {
+  PaginationState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
@@ -150,34 +158,48 @@ const columns = [
   }),
 ]
 
-
-
 const TableComponentTs = () => {
   const [ sites, setSites ] = useState(null)
-  const [data, _setData] = React.useState(() => [...siteData])
+  const [ data, setData ] = React.useState(() => [...siteData])
+  
   const rerender = React.useReducer(() => ({}), {})[1]
+  let totalRows = 0
+  const [pagination, setPagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  })
+  
+  console.log(fetchData(pagination))
   
 
-
+  // const dataQuery = useQuery({
+  //   queryKey: ['data', pagination],
+  //   queryFn: () => fetchData(pagination),
+  //   placeholderData: keepPreviousData, // don't have 0 rows flash while changing pages/loading next page
+  // })
+  
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    manualPagination: true,
+    // rowCount: totalRows
   })
 
-  useEffect(() => {
-    const fetchSites = async () =>  {
-      const response = await fetch('http://localhost:5000/api/sites')
-      const json = await response.json() 
+  // useEffect(() => {
+  //   const fetchSites = async () =>  {
+  //     const response = await fetch('http://localhost:5000/api/sites')
+  //     const json = await response.json() 
+  //     // totalRows = json.totalRows 
 
-      if(response.ok){
-        console.log(json)
-        setSites(json)
-      }
-    }
+  //     if(response.ok){
+  //       console.log(json)
+  //       setSites(json)
+  //     }
+  //   }
 
-    fetchSites()
-  }, [])
+  //   fetchSites()
+  // }, [])
 
   return (
     <>

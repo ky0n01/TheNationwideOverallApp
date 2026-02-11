@@ -6,7 +6,7 @@ import {
     getSite, 
     createSite,
     updateSite, 
-    deleteSite
+    deleteSite, 
 } from '../controllers/siteController.js'
 
 const router = express.Router();
@@ -25,6 +25,5 @@ router.patch('/:id', updateSite)
 
 // DELETE a new Site
 router.delete('/:id', deleteSite)
-
 
 export default router;

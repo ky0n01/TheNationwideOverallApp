@@ -24,12 +24,12 @@ app.use('/api/sites/', locationRoutes)
 
 // Connnect to database
 mongoose.connect(URI)
-    .then(() => {
-        // listens for requests
-        app.listen(PORT, () => {
-            console.log('Connected to MONGODB. Now listening on port:', PORT)
+        .then(() => {
+            // listens for requests
+            app.listen(PORT, () => {
+                console.log('Connected to MONGODB. Now listening on port:', PORT)
+            });
+        })
+        .catch((error) => {
+            console.error(error);
         });
-    })
-    .catch((error) => {
-        console.error(error);
-    });

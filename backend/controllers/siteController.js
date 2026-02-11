@@ -1,12 +1,16 @@
 import Site from '../models/SitesModel.js'
 import mongoose from 'mongoose'
 
-// Get ALL sites
+// Get all sites
 const getAllSites = async (req, res) => {
     try {
         const sites = await Site.find()
                                 .sort( {nationwide_id: -1} )
-        res.status(200).json(sites)
+        const total_rows = await Site.countDocuments({})
+                    
+        const json = { sites }  
+        json.totalRows = total_rows                      
+        res.status(200).json(json)
     } catch(err) {
         res.status(400).json( {error: err} )
     }
@@ -17,13 +21,13 @@ const getSite = async (req, res) => {
     const { id } = req.params
     try { 
         if(!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(404).json( {error: `Sorry, but the site you are looking for doesnt exist. Id: ${id}`} )
+            return res.status(404).json( {error: `Sorry, but the site you are looking for doesnt exist. Id: ${id})`} )
         }
 
         const site = await Site.findById(id) 
         
         if(!site){
-            return res.status(404).json( {error: `Sorry, but the site you are looking for doesnt exist. Id: ${id}`} )
+            return res.status(404).json( {error: `Sorry, but the site you are looking for doesnt exist. Id: ${id})`} )
         }
 
         res.status(200).json(site)
@@ -73,13 +77,13 @@ const deleteSite = async (req, res) => {
     const { id } = req.params
 
     try {
-        if(!mongoose.Types.ObjectId.isValid(id)) {
+        if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(404).json( {error: `Sorry, but the site you are looking for doesnt exist. Id: ${id}`} )
         }
 
         const site = await Site.findOneAndDelete( {_id: id} )
     
-        if(!site){
+        if (!site) {
             return res.status(200).json( {error: `Failed to delete site with ID: ${id}`} )
         }
         
@@ -88,6 +92,16 @@ const deleteSite = async (req, res) => {
         res.status(400).json( {error: `Error: ${err}. Unable to delete the Site Id ${id}`} )
     }
 }
+
+// const countTotalRows = async (req, res) => {
+//     try {
+//         const sites = await Site.countDocuments({})
+//         console.log( "Number of sites: " + sites )
+//         res.status(200).json(sites)
+//     } catch(err) {
+//         res.status(400).json( {error: err} )
+//     }
+// }
 
 export {
     getAllSites,

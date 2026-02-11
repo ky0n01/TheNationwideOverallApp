@@ -34,7 +34,7 @@ const NavBar = () => {
                                 alt="React Logo"
                             />
                             <span className="hidden md:block text-white text-2xl font-bold ml-2">
-                                NAL 
+                                Nationwide Overall Locations
                             </span>
                         </a> 
                     </div>
